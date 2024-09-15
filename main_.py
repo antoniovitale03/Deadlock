@@ -1,4 +1,3 @@
-"Alghoritms for Deadlock Handling"
 from Deadlock import Deadlock
 
 def main():
