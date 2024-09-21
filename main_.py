@@ -1,7 +1,7 @@
 from Deadlock import Deadlock
 
 def main():
-    response = int(input("Scegli l'algoritmo per gestire il deadlock:\n"
+    response = int(input("Scegli l'algoritmo che vuoi usare per gestire il deadlock:\n"
                          "1) banchiere (deadlock prevention)\n"
                          "2) rilevamento del deadlock (deadlock detection)\n"))
     if response == 1:
