@@ -2,10 +2,12 @@ import sys
 class Deadlock:
     def __init__(self):
         self.procs_num, self.resources_num = self.procs_and_resources()
+
     def procs_and_resources(self):
         procs_num = int(input("Inserisci il numero di processi: "))
         resources_num = int(input("Inserisci il numero di risorse: "))
         return procs_num, resources_num
+    
     def on_nested_list(self, procs_num, resources_num, X):  #riempe la nested list creata con mat()
         M = self.mat(procs_num, resources_num)
         print(f"Matrice {X}: \n")
@@ -14,6 +16,7 @@ class Deadlock:
             for j in range(resources_num):
                 M[i][j] = input(" ")
         return M
+    
     def mat(self, m, n):  # crea una nested list di lunghezza m vuota
         list = []
         for i in range(m):
@@ -21,12 +24,14 @@ class Deadlock:
             for j in range(n):
                 list[i].append(0)
         return list # cre #crea una e #crea una
+    
     def need(self, Max, Allocation, m, n): #crea la matrice Need
         need = self.mat(m, n)
         for i in range(m):
             for j in range(n):
                 need[i][j] = Max[i][j] - Allocation[i][j]
         return need
+    
     def total(self, All, Av, m, n): #crea il vettore Tot
         tot = []
         s = 0
@@ -37,12 +42,14 @@ class Deadlock:
             tot.append(s)
             s = 0
         return tot
+    
     def available(self, n, X): #crea la matrice Available
         Available = [0] * n
         print(f"Vettore {X}: ")
         for i in range(n):
             Available[i] = input(" ")
         return Available
+    
     def on_create_1(self, m, n): #istanzio i dati iniziali
         Allocation = self.on_nested_list(m, n, "Allocation")
         Max = self.on_nested_list(m, n, "Max")
@@ -51,6 +58,7 @@ class Deadlock:
         Tot = self.total(Allocation, Available, m, n)
         print(f"Allocation:\n {Allocation}\n Max:\n {Max}\n Available:\n {Available}\n Need: {Need}\n Tot:\n{Tot}")
         return Allocation, Max, Available, Need, Tot
+    
     def on_create_2(self, m, n):
         Allocation = self.on_nested_list(m, n, "Allocation")
         Request = self.on_nested_list(m, n, "Request")
@@ -69,6 +77,7 @@ class Deadlock:
             else:
                 Finish.append("F")
         return Allocation, Request, Work, Finish
+    
     def is_admissible(self, need, max, tot, m, n): #controlla l'ammissibilità del sistema
         for i in range(m):
             for j in range(n):
@@ -82,6 +91,7 @@ class Deadlock:
                     sys.exit(0)
             else:
                 return True
+            
     def request_1(self, n, need, av, all): #gestisce la richiesta di risorse nell'algoritmo del banchiere
         # k=1 richiesta ammissibile
         # k=0 richiesta non ammissibile
@@ -106,6 +116,7 @@ class Deadlock:
             print("Richiesta non ammissibile.")
             k = 0
         return k, av, all, need
+    
     def request_2(self, resources_num, req):  #gestisce la richiesta di risorse nell'algoritmo di rilevamento del deadlock
         r = [0] * resources_num
         Req = req
@@ -116,6 +127,7 @@ class Deadlock:
         for j in range(resources_num):
             Req[q][j] = r[j] + req[q][j]
         return Req
+    
     def sequenza_sicura(self, All, Av, N, m, n):  # trova la sequenza sicura e l'evoluzione del vettore Available
         temp = [0] * m  # variabile temporanea utilizzata per tracciare i processi i cui need<=available
         temp2 = [0] * m  # seconda variabile temporanea usata nel caso in cui due o più processi hanno need<=available (len(temp) >1)
@@ -155,11 +167,13 @@ class Deadlock:
             if v[i] != -999:
                 n += 1
         return n
+    
     def vett(self, procs_num): #crea il vettore di tutti i processi del sistema, usato per identificare quali sono in stallo
         v = []
         for i in range(procs_num):
             v.append(i + 1)
         return v
+    
     def detection(self, All, Req, Work, Finish, m, n):  # trova la sequenza sicura e l'evoluzione del vettore Work
         temp = [0] * m  # variabile temporanea utilizzata per tracciare i processi i cui need<=available
         temp2 = [0] * m  # seconda variabile temporanea usata nel caso in cui due o più processi hanno need<=available (len(temp) >1)
@@ -213,6 +227,7 @@ class Deadlock:
         for t in range(m):
             print(f"P{procs[t]} ", end=" ")
             print(Work)
+
     def handle_request_1(self, Allocation, Available, Need):
         response = input("C'è un'ulteriore richiesta di risorse? y/n")
         if response == "n":
@@ -227,6 +242,7 @@ class Deadlock:
         else:
             print("Devi premere y o n!")
             self.handle_request_1(Allocation, Available, Need)
+
     def handle_request_2(self, Allocation, Request, Work, Finish):
         response = input("C'è un'ulteriore richiesta di risorse = y/n")
         if response == "n":
@@ -237,10 +253,12 @@ class Deadlock:
         else:
             print("Devi premere y o n!")
             self.handle_request_2(Allocation, Request, Work, Finish)
+
     def main_1(self):
         [Allocation, Max, Available, Need, Tot] = self.on_create_1(self.procs_num, self.resources_num)
         if self.is_admissible(Need, Max, Tot, self.procs_num, self.resources_num):
             self.handle_request_1(Allocation, Available, Need)
+            
     def main_2(self):
         [Allocation, Request, Work, Finish] = self.on_create_2(self.procs_num, self.resources_num)
         self.handle_request_2(Allocation, Request, Work, Finish)
