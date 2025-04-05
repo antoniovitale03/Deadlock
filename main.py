@@ -5,11 +5,11 @@ def main():
                          "1) banchiere (deadlock prevention)\n"
                          "2) rilevamento del deadlock (deadlock detection)\n"))
     if response == 1:
-        A = Deadlock()
-        A.main_1()
+        obj = Deadlock()
+        obj.main_1()
     elif response == 2:
-        A = Deadlock()
-        A.main_2()
+        obj = Deadlock()
+        obj.main_2()
     else:
         print("Input non valido. Riprova")
         main()
